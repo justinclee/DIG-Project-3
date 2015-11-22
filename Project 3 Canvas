@@ -1,0 +1,371 @@
+<!doctype html>
+<html>
+<head>
+<title>Responsive Interactive Canvas</title>
+
+</head>
+<body>
+<canvas id='canvas' width=1000 height=1000></canvas>
+</body>	  
+<script>
+var mainCanvas = document.getElementById("canvas");
+var mainContext = mainCanvas.getContext('2d');
+ 
+var circles = new Array();
+var squares = new Array();
+var triangles = new Array();
+var stars = new Array();
+var diamonds = new Array();
+
+ 
+var requestAnimationFrame = window.requestAnimationFrame || 
+                            window.mozRequestAnimationFrame ||
+                            window.webkitRequestAnimationFrame ||
+                            window.msRequestAnimationFrame;
+ 
+ //intialize text variables
+        var dashLen = 220;
+        var dashOffset = dashLen;
+        var speed = 5;
+        var txt = 'ey';
+        var x = 30; 
+		var it = 0;
+ 
+ 
+ //text properties
+	mainContext.font = "50px Comic Sans MS, cursive, TSCu_Comic, sans-serif"; 
+    mainContext.lineWidth = 5; 
+    mainContext.lineJoin = "round";
+    mainContext.globalAlpha = 2/3;
+    mainContext.strokeStyle = mainContext.fillStyle = "#000";
+ 
+ 
+//draw text function
+ (function drawText() {
+     mainContext.clearRect(x, 0, 60, 150);
+
+
+     mainContext.setLineDash([dashLen - dashOffset, dashOffset - speed]);
+
+
+      dashOffset -= speed;
+
+
+      mainContext.strokeText(txt[it], x, 90);
+
+      if (dashOffset > 0) requestAnimationFrame(drawText);
+      else {
+
+        mainContext.fillText(txt[it], x, 90);
+
+        dashOffset = dashLen;
+
+
+        x += mainContext.measureText(txt[it++]).width + mainContext.lineWidth * Math.random();
+
+
+        mainContext.setTransform(1, 0, 0, 1, 0, 3 * Math.random());
+
+
+        mainContext.rotate(Math.random() * 0.005);
+
+
+        if (it < txt.length) requestAnimationFrame(drawText);
+      }
+    })();  
+function Circle(radius, speed, width, xPos, yPos) {
+    this.radius = radius;
+    this.speed = speed;
+    this.width = width;
+    this.xPos = xPos;
+    this.yPos = yPos;
+    this.opacity = .1 + Math.random() * .5;
+ 
+    this.counter = 0;
+ 
+    var signHelper = Math.floor(Math.random() * 2);
+ 
+    if (signHelper == 1) {
+        this.sign = -1;
+    } else {
+        this.sign = 1;
+    }
+}
+
+function Square(radius, speed, width, xPos, yPos) {
+	this.radius = radius;
+    this.speed = speed;
+    this.width = width;
+    this.xPos = xPos;
+    this.yPos = yPos;
+    this.opacity = .1 + Math.random() * .5;
+ 
+    this.counter = 0;
+ 
+    var signHelper = Math.floor(Math.random() * 2);
+ 
+    if (signHelper == 1) {
+        this.sign = -1;
+    } else {
+        this.sign = 1;
+    }
+}
+
+function Triangle(radius, speed, width, xPos, yPos) {
+	this.radius = radius;
+    this.speed = speed;
+    this.width = width;
+    this.xPos = xPos;
+    this.yPos = yPos;
+    this.opacity = .1 + Math.random() * .5;
+ 
+    this.counter = 0;
+ 
+    var signHelper = Math.floor(Math.random() * 2);
+ 
+    if (signHelper == 1) {
+        this.sign = -1;
+    } else {
+        this.sign = 1;
+    }
+}
+
+function Star(radius, speed, width, xPos, yPos) {
+	this.radius = radius;
+    this.speed = speed;
+    this.width = width;
+    this.xPos = xPos;
+    this.yPos = yPos;
+    this.opacity = .1 + Math.random() * .5;
+ 
+    this.counter = 0;
+ 
+    var signHelper = Math.floor(Math.random() * 2);
+ 
+    if (signHelper == 1) {
+        this.sign = -1;
+    } else {
+        this.sign = 1;
+    }
+}
+
+function Diamond(radius, speed, width, xPos, yPos) {
+	this.radius = radius;
+    this.speed = speed;
+    this.width = width;
+    this.xPos = xPos;
+    this.yPos = yPos;
+    this.opacity = .1 + Math.random() * .5;
+ 
+    this.counter = 0;
+ 
+    var signHelper = Math.floor(Math.random() * 2);
+ 
+    if (signHelper == 1) {
+        this.sign = -1;
+    } else {
+        this.sign = 1;
+    }
+}
+ //drawing circle
+Circle.prototype.update = function () {
+    this.counter += this.sign * this.speed;
+ 
+    mainContext.beginPath();
+    mainContext.arc(this.xPos + Math.cos(this.counter / 100) * this.radius, 
+                    this.yPos + Math.sin(this.counter / 100) * this.radius, 
+                    this.width, 
+                    0, 
+                    Math.PI * 2,
+                    false);
+                     
+    mainContext.closePath();
+ 
+    mainContext.fillStyle = 'rgba(255, 255, 51,' + this.opacity + ')';
+    mainContext.fill();
+};
+
+//drawing square
+Square.prototype.update = function () {
+    this.counter += this.sign * this.speed;
+ 
+	
+	mainContext.fillRect(this.xPos + Math.cos(this.counter / 100) *this.radius, this.yPos + Math.sin(this.counter / 100)*this.radius, 50, 50);
+    
+	mainContext.fillStyle = 'rgba(0, 128, 51,' + this.opacity + ')';				
+	
+};
+//drawing triangle
+Triangle.prototype.update = function () {
+    this.counter += this.sign * this.speed;
+ 
+	mainContext.beginPath();
+	mainContext.moveTo(this.xPos + Math.cos(this.counter / 100)*this.radius, (this.yPos + Math.sin(this.counter / 100)*this.radius));
+	mainContext.lineTo((this.xPos + Math.cos(this.counter / 100)+50), (this.yPos + Math.sin(this.counter / 100)+100));
+	mainContext.lineTo((this.xPos + Math.cos(this.counter / 100)+100), (this.yPos + Math.sin(this.counter / 100)+100));
+	mainContext.closePath();
+	mainContext.lineWidth = 10;
+	mainContext.fillStyle = 'rgba(255, 51, 51,' + this.opacity + ')';
+	mainContext.fill();
+	
+	
+};
+
+//drawing cloud
+Star.prototype.update = function () {
+	
+	mainContext.beginPath();
+	mainContext.moveTo(this.xPos + Math.cos(this.counter / 100)*this.radius, (this.yPos + Math.sin(this.counter / 100)*this.radius));
+	mainContext.lineTo((this.xPos + Math.cos(this.counter / 100)+50),(this.yPos + Math.sin(this.counter / 100)));
+	mainContext.lineTo((this.xPos + Math.sin(this.counter / 100)+0), (this.yPos + Math.cos(this.counter / 100)+50));
+	mainContext.lineTo(this.xPos + Math.cos(this.counter / 100), (this.yPos + Math.cos(this.counter / 100)+40));
+	mainContext.closePath();
+	mainContext.fillStyle = 'rgba(0, 51, 153,' + this.opacity + ')';
+	mainContext.fill();
+
+}
+
+
+
+Diamond.prototype.update = function () {
+
+	mainContext.beginPath();
+	mainContext.moveTo((this.xPos + Math.cos(this.counter / 100)+75)*this.radius,(this.yPos + Math.sin(this.counter / 100)*this.radius));
+
+	mainContext.lineTo(this.xPos + Math.cos(this.counter / 100)+150,(this.yPos + Math.cos(this.counter / 100)+100));
+
+	mainContext.lineTo(this.xPos + Math.cos(this.counter / 100)+75, (this.yPos + Math.cos(this.counter / 100)+200));
+
+	mainContext.lineTo(this.xPos + Math.cos(this.counter / 100),(this.yPos + Math.cos(this.counter / 100)+100));
+	mainContext.closePath();
+	mainContext.fillStyle = 'rgba(102, 0, 204,' + this.opacity + ')';
+	mainContext.fill();
+	
+}
+
+
+
+
+
+
+
+
+		
+
+
+function setupCircles() {
+    for (var i = 0; i < 25; i++) {
+        var randomX = Math.round(-200 + Math.random() * 700);
+        var randomY = Math.round(-200 + Math.random() * 700);
+        var speed = .2 + Math.random() * 3;
+        var size = 5 + Math.random() * 100;
+        var radius = 5 + Math.random() * 100;
+ 
+        var circle = new Circle(radius, speed, size, randomX, randomY);
+        circles.push(circle);
+    }
+    drawAndUpdate();
+}
+setupCircles();
+
+function setupSquares() {
+    for (var i = 0; i < 25; i++) {
+        var randomX = Math.round(-100 + Math.random() * 700);
+        var randomY = Math.round(-100 + Math.random() * 700);
+        var speed = .05 + Math.random() * 3;
+        var size = 5 + Math.random() * 100;
+		var radius = 5 + Math.random() * 100;
+ 
+        var square = new Square(radius, speed, size, randomX, randomY);
+        squares.push(square);
+    }
+    drawAndUpdate();
+}
+setupSquares();
+
+function setupTriangles() {
+    for (var i = 0; i < 25; i++) {
+        var randomX = Math.round(-100 + Math.random() * 700);
+        var randomY = Math.round(-100 + Math.random() * 700);
+        var speed = .05 + Math.random() * 3;
+        var size = 5 + Math.random() * 100;
+		var radius = 5 + Math.random() * 100;
+ 
+        var triangle = new Triangle(radius, speed, size, randomX, randomY);
+        triangles.push(triangle);
+    }
+    drawAndUpdate();
+}
+setupTriangles();
+
+function setupStars() {
+    for (var i = 0; i < 25; i++) {
+        var randomX = Math.round(-100 + Math.random() * 700);
+        var randomY = Math.round(-100 + Math.random() * 700);
+        var speed = .2 + Math.random() * 3;
+        var size = 5 + Math.random() * 100;
+		var radius = 5 + Math.random() * 100;
+ 
+        var star = new Star(radius, speed, size, randomX, randomY);
+        stars.push(star);
+    }
+    drawAndUpdate();
+}
+setupStars();
+ 
+ 
+ function setupDiamonds() {
+    for (var i = 0; i < 25; i++) {
+        var randomX = Math.round(-100 + Math.random() * 700);
+        var randomY = Math.round(-100 + Math.random() * 700);
+        var speed = .2 + Math.random() * 3;
+        var size = 5 + Math.random() * 100;
+		var radius = 5 + Math.random() * 100;
+ 
+        var diamond = new Diamond(radius, speed, size, randomX, randomY);
+        diamonds.push(diamond);
+    }
+    drawAndUpdate();
+}
+setupDiamonds();
+
+
+function drawAndUpdate() {
+    mainContext.clearRect(0, 0, 1000, 1000);
+
+ 
+    for (var i = 0; i < circles.length; i++) {
+     
+        var myCircle = circles[i];
+        myCircle.update();
+    }
+	for (var i = 0; i < squares.length; i++) {
+     
+		 var mySquare = squares[i];
+        mySquare.update();
+    }
+	
+	for (var i = 0; i < triangles.length; i++) {
+     
+		 var myTriangle = triangles[i];
+        myTriangle.update();
+    }
+	
+	for (var i = 0; i < stars.length; i++) {
+     
+		 var myStar = stars[i];
+        myStar.update();
+    }
+	
+	for (var i = 0; i < diamonds.length; i++) {
+     
+		 var myDiamond = diamonds[i];
+        myDiamond.update();
+    }
+     
+    requestAnimationFrame(drawAndUpdate);
+}
+
+
+</script>
+</html>
