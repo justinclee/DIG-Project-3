@@ -23,56 +23,7 @@ var requestAnimationFrame = window.requestAnimationFrame ||
                             window.webkitRequestAnimationFrame ||
                             window.msRequestAnimationFrame;
  
- //intialize text variables
-        var dashLen = 220;
-        var dashOffset = dashLen;
-        var speed = 5;
-        var txt = 'ey';
-        var x = 30; 
-		var it = 0;
- 
- 
- //text properties
-	mainContext.font = "50px Comic Sans MS, cursive, TSCu_Comic, sans-serif"; 
-    mainContext.lineWidth = 5; 
-    mainContext.lineJoin = "round";
-    mainContext.globalAlpha = 2/3;
-    mainContext.strokeStyle = mainContext.fillStyle = "#000";
- 
- 
-//draw text function
- (function drawText() {
-     mainContext.clearRect(x, 0, 60, 150);
 
-
-     mainContext.setLineDash([dashLen - dashOffset, dashOffset - speed]);
-
-
-      dashOffset -= speed;
-
-
-      mainContext.strokeText(txt[it], x, 90);
-
-      if (dashOffset > 0) requestAnimationFrame(drawText);
-      else {
-
-        mainContext.fillText(txt[it], x, 90);
-
-        dashOffset = dashLen;
-
-
-        x += mainContext.measureText(txt[it++]).width + mainContext.lineWidth * Math.random();
-
-
-        mainContext.setTransform(1, 0, 0, 1, 0, 3 * Math.random());
-
-
-        mainContext.rotate(Math.random() * 0.005);
-
-
-        if (it < txt.length) requestAnimationFrame(drawText);
-      }
-    })();  
 function Circle(radius, speed, width, xPos, yPos) {
     this.radius = radius;
     this.speed = speed;
